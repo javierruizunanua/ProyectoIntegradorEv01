@@ -73,9 +73,6 @@ if (isset($_SESSION['user'])) {
                           <li class="nav-item">
                               <a class="nav-link" href="login.php">Entrar</a>
                           </li>
-                          <li class="nav-item">
-                              <a class="nav-link" href="logout.php">Salir</a>
-                          </li>
                       </ul>
                     </div>
                   </nav>
