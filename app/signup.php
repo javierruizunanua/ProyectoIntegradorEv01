@@ -1,6 +1,8 @@
 <?php
 
-require_once 'header.php';
+require_once(dirname(__FILE__) . '/../templates/header_app.php');
+require_once(dirname(__FILE__) . '/../persistence/conf/PersistentManager.php');
+require_once(dirname(__FILE__) . '/../persistence/DAO/UserDAO.php');
 
 $error = $user = $pass = "";
 
@@ -16,28 +18,22 @@ if (isset($_POST['user'])) {
         $error = "Debes completar todos los campos<br><br>";
     }
     else {
-        $result = queryMysql("SELECT * FROM usuarios WHERE user='$user'");
+        $uDAO = new UserDAO();
+        
+        //$result = queryMysql("SELECT * FROM usuarios WHERE user='$user'");
 
-        if ($result->num_rows) {
-            $error = "El usuario ya existe<br><br>";
+        if ($uDAO->checkUserNameExists($user))
+        {
+            $error = "<span class='error'>Ya se ha registrado con ese usuario</span><br><br>";
         }
         else {
-            queryMysql("INSERT INTO usuarios(user,pass) VALUES('$user', '$pass')");
+            $result = $uDAO->insert($user, $pass);
+            //queryMysql("INSERT INTO usuarios(user,pass) VALUES('$user', '$pass')");
 
-            // TODO
-            // Establecer el almacenamiento de usuario en una variable "user" almacenada en sesión
-            // para que al pulsar sobre el menú de Acceder no se le vuelva a preguntar por usuario/contraseña
-
-            $_SESSION['user'] = $user;
-            if (!isset($_SESSION['CREATED'])) {
-                $_SESSION['CREATED'] = time();
-            } else if (time() - $_SESSION['CREATED'] > 1800) {
-                // session started more than 30 minutes ago
-                session_regenerate_id(true);    // change session ID for the current session and invalidate old session ID
-                $_SESSION['CREATED'] = time();  // update creation time
-            }
+            $sh = new SessionHelper();
+            $sh->setSession($user);
             
-        header('Location: login.php?');
+            header('Location: login.php?');
 
     }
   }

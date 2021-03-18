@@ -1,60 +1,55 @@
 <?php
 
-require_once 'header.php'; 
+require_once(dirname(__FILE__) . '/../templates/header_app.php');
+require_once(dirname(__FILE__) . '/../persistence/conf/PersistentManager.php');
+require_once(dirname(__FILE__) . '/../persistence/DAO/UserDAO.php');
+
 $error = $user = $pass = "";
 // Al pulsar el boton del formulario se recarga la misma página, volviendo a ejecutar este script.
 // En caso de que se haya  completado los valores del formulario se verifica la existencia de usuarios en la base de datos
 // para los valores introducidos.
 if (isset($_POST['user']))
 {
-  $user = $_POST['user'];
-  $pass = $_POST['pass'];
+    $user = $_POST['user'];
+    $pass = $_POST['pass'];
   
-  if ($user == "" || $pass == "")
-      $error = "Debes completar todos los campos<br>";
-  else
-  {
-      // TODO Esta la consulta de base de datos correspondiente para verificar si el usuario existe
-      $result = queryMySQL("SELECT user, pass FROM usuarios WHERE user='$user' AND pass='$pass'");
-
-    if ($result->num_rows == 0)
-    {
-      $error = "<span class='error'>Email/Contraseña invalida</span><br><br>";
-    }
+    if ($user == "" || $pass == "")
+        $error = "Debes completar todos los campos<br>";
     else
     {
-      // TODO Realiza la gestión de la sesión de usuario:
-      // Almacena en la variables de sesión user el valore de $user
-        while($usuario = $result->fetch_assoc()){
-            if($usuario['user'] == $user) {
-                $_SESSION['user'] = $user;
-            } else {
-                $error = "Usuario no registrado";
-            }  
+      
+        $uDAO = new UserDAO();
+      
+        //$result = queryMySQL("SELECT user, pass FROM usuarios WHERE user='$user' AND pass='$pass'");
+         
+        if ($uDAO->checkExists($user, $pass) == false)
+        {
+            $error = "<span class='error'>No estás registrado</span><br><br>";
         }
-
-        // Control de vida de la sesión antes de que expire
-        if (!isset($_SESSION['CREATED'])) {
-            $_SESSION['CREATED'] = time();
-        } else if (time() - $_SESSION['CREATED'] > 1800) {
-            // session started more than 30 minutes ago
-            session_regenerate_id(true);    // change session ID for the current session and invalidate old session ID
-            $_SESSION['CREATED'] = time();  // update creation time
-        }
+        else
+        {           
+            
+            $sh = new SessionHelper();
         
-        // En caso de un registro  exitoso 
-        // La gestión de usuario en la página principal se hace a través de la variable de sesión
-        if (isset($_SESSION['user'])){
-            header('Location: index.php');
+            $result = $sh->setSession($user);
+
+            header('Location: ../index.php');
+
+        
+            // En caso de un registro  exitoso 
+            // La gestión de usuario en la página principal se hace a través de la variable de sesión
+            if (isset($_SESSION['user']))
+            {
+                header('Location: ../index.php');
+            }
         }
     }
-  }
 }
 // En caso de que no se haya completado el formulario,
 // analizamos si hay variable de sesión almacenada.
 else if (isset($_SESSION['user'])){
     // En caso de que exista variable de sesión redireccionamos a la página principal
-     header('Location: index.php'); 
+     header('Location: ../index.php'); 
 }
 ?>
 <div class="container">
