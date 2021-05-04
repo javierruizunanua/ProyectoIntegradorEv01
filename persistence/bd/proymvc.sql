@@ -1,6 +1,6 @@
 -- MariaDB dump 10.17  Distrib 10.4.14-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: usuarios_db
+-- Host: localhost    Database: proymvc
 -- ------------------------------------------------------
 -- Server version	10.4.14-MariaDB
 
@@ -16,18 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `usuarios`
+-- Table structure for table `games`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
+DROP TABLE IF EXISTS `games`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usuarios` (
+CREATE TABLE `games` (
+  `idgame` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `cover` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `price` decimal(4,2) DEFAULT NULL,
+  `valoration` decimal(3,2) DEFAULT NULL,
+  `company` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idgame`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
   `iduser` int(11) NOT NULL AUTO_INCREMENT,
-  `user` varchar(45) DEFAULT NULL,
-  `pass` varchar(45) DEFAULT NULL,
+  `username` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `password` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -39,4 +58,4 @@ CREATE TABLE `usuarios` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-18 13:19:02
+-- Dump completed on 2021-03-18 19:17:09

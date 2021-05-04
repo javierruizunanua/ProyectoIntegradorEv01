@@ -9,7 +9,7 @@ class PersistentManager {
     //Parámetros de conexión a la BD.
     private $userBD = 'root';
     private $psswdBD = '';
-    private $nameBD = 'usuarios_db';
+    private $nameBD = 'proymvc';
     private $hostBD = 'localhost';
 
     //Get de la conexión
